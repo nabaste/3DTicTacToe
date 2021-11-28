@@ -72,10 +72,10 @@ let crosses = [];
 let sphereMaterial, sphereGeometry, crossMaterial, crossGeometry, planeGeometry;
 let sphereContainer, crossContainer;
 
+//small adjustment for safari. Browser detection using browser-js. 
 let extension = (browser.name == "safari") ? `#extension GL_OES_standard_derivatives : enable` : ``;
 
 //shader
-
 let vertexShader = `
     varying vec2 vUv;
     void main()	{
@@ -118,12 +118,7 @@ function init() {
 
     const colorBKG = new THREE.Color(0x000000);
     scene = new THREE.Scene();
-
-
     scene.background = null;
-
-
-
 
 
     //Camera
@@ -132,7 +127,6 @@ function init() {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.minDistance = 1;
     controls.maxDistance = 100;
-    // controls.enabled = false;
 
     //Lights
     const ambient = new THREE.AmbientLight(0xFFFFFF, 0.3);
@@ -167,7 +161,7 @@ function init() {
     checkersContainer.add(checkersExclusiveContainer);
     scene.add(checkersContainer);
 
-    // const planeGeometry = new THREE.PlaneGeometry(checkerSize, checkerSize);
+    
     planeGeometry = new THREE.BoxGeometry(checkerSize, checkerSize, checkerSize);
     planeMaterial = new THREE.MeshBasicMaterial({ color: idleColor, side: THREE.DoubleSide, transparent: true, opacity: 0.3, wireframe: true });
     planeMaterialOnHover = new THREE.MeshBasicMaterial({ color: idleColor, side: THREE.DoubleSide, transparent: true, opacity: 0.3 });
@@ -203,7 +197,6 @@ function init() {
     updateCheckerContainerPosition();
 
     //players
-    // sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xFF034E });
     sphereMaterial = new THREE.MeshPhysicalMaterial({ color: 0xFF034E, clearcoat: 0.9 });
     sphereGeometry = new THREE.SphereGeometry(1, 20, 20);
 
@@ -217,7 +210,6 @@ function init() {
         console.error(error);
     });
 
-    // crossMaterial = new THREE.MeshBasicMaterial({ color: 0x00fffb });
     crossMaterial = new THREE.MeshPhysicalMaterial({ color: 0x00fffb, clearcoat: 0.8 });
 
     sphereContainer = new THREE.Object3D();
@@ -253,7 +245,6 @@ function init() {
 function enableListeners() {
     if (browser.mobile) {
         canvas.addEventListener('touchstart', onTouchStart);
-        // canvas.addEventListener('touchend', onPointerOrTouchInteraction);
     } else {
         document.addEventListener('pointermove', onPointerMove);
         document.addEventListener('pointerdown', onPointerOrTouchInteraction);
@@ -264,7 +255,6 @@ function enableListeners() {
 function disableListeners() {
     if (browser.mobile) {
         canvas.removeEventListener('touchstart', onTouchStart);
-        // canvas.removeEventListener('touchend', onPointerOrTouchInteraction);
     } else {
         document.removeEventListener('pointermove', onPointerMove);
         document.removeEventListener('pointerdown', onPointerOrTouchInteraction);
@@ -446,12 +436,10 @@ function updateCheckerContainerPosition() {
     gameCenter.y = params.separationY * ((checkerAmount - 1) / 2);
     gameCenter.z = params.separationZ * ((checkerAmount - 1) / 2);
 
-
     checkersContainer.position.set(-gameCenter.x, -gameCenter.y, -gameCenter.z);
 }
 
 function updateCheckerPos(axis) {
-
 
     checkerSeparations[0] = params.separationX;
     checkerSeparations[1] = params.separationY;
@@ -494,12 +482,13 @@ function updateUI(result) {
     }
 
 }
+
 function updateLightPositions(){
     spot1.position.set(0, 0, -lightPositioner(params.separationY));
     spot2.position.set(0, 0, lightPositioner(params.separationY));
     spot3.position.set(0, lightPositioner(params.separationY), 0);
     spot4.position.set(0, -lightPositioner(params.separationY), 0);
-};
+}
 
 function lightPositioner(separation){
     let coord = ((params.size -1) * separation + checkerSize ) * (0.5 * params.size);
@@ -561,7 +550,6 @@ function reset() {
     updateCheckerContainerPosition();
     updateLightPositions();
     isPlaying = true;
-
 }
 
 function onTouchStart(evt) {
@@ -616,8 +604,6 @@ function onPointerOrTouchInteraction(evt) {
             //create move
             crosses[crossActions.length] = new THREE.Mesh(crossGeometry, crossMaterial);
             crosses[crossActions.length].position.copy(pos);
-            // crosses[crossActions.length].castShadow = true;
-            // crosses[crossActions.length].receiveShadow = true;
             crossContainer.add(crosses[crossActions.length]);
 
             //clear checker
